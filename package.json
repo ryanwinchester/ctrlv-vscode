@@ -3,6 +3,8 @@
   "displayName": "ctrlv",
   "description": "Code pastebin ctrlv.io",
   "version": "0.0.1",
+  "repository": "https://github.com/ryanwinchester/ctrlv-vscode",
+  "license": "Apache-2.0",
   "engines": {
     "vscode": "^1.85.0"
   },
