@@ -2,7 +2,7 @@
   "name": "ctrlv",
   "displayName": "ctrlv",
   "description": "Code pastebin ctrlv.io",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "RyanWinchester",
   "icon": "images/icon.png",
   "repository": "https://github.com/ryanwinchester/ctrlv-vscode",
