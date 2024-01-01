@@ -3,6 +3,7 @@ import * as https from 'https';
 
 type ReqHeaders = {
   'Content-Type': string,
+  'Content-Length': number,
   'Authorization'?: string
 };
 
@@ -33,42 +34,62 @@ export function activate(context: vscode.ExtensionContext) {
       ? editor.document.getText()
       : editor.document.getText(selection);
 
-    try {
-      const host = config.get('host');
-      const apiKey = config.get('apiKey');
-      const expiresIn = config.get('expiresIn');
+    const apiKey = config.get('apiKey');
+    const host = config.get('host') || "ctrlv.io";
+    const expiresIn = config.get('expiresIn') || "1_day";
 
-      let headers = {
-        'Content-Type': 'application/json',
-      } as ReqHeaders;
+    const postData = JSON.stringify({
+      content: content,
+      language: language,
+      expires_in: expiresIn,
+    });
 
-      if (apiKey) {
-        headers['Authorization'] = `Bearer ${apiKey}`;
-      }
+    let headers = {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData),
+    }  as ReqHeaders;
 
-      const response = await fetch(`${host}/api/paste`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          content: content,
-          language: language,
-          expires_in: expiresIn,
-        }),
+    if (apiKey) {
+      headers['Authorization'] = `Bearer ${apiKey}`;
+    }
+
+    const options = {
+      hostname: host,
+      port: 443,
+      path: '/api/paste',
+      method: 'POST',
+      headers: headers
+    } as object;
+
+    const req = https.request(options, (res) => {
+      let data = '';
+
+      res.on('data', (chunk) => {
+        data += chunk;
       });
 
-      if (response.status === 201) {
-        const data = await response.json() as DataSuccess;
-        await vscode.env.clipboard.writeText(data.link);
-        vscode.window.showInformationMessage('Link copied to clipboard');
-      } else {
-        const data = await response.json() as DataError;
-        vscode.window.showErrorMessage(
-          `Error posting code to ${host}: ${JSON.stringify(data.errors)}`
-        );
-      }
-    } catch (error) {
-      vscode.window.showErrorMessage(`Error: ${error}`);
-    }
+      res.on('end', async () => {
+        try {
+          if (res.statusCode === 201) {
+            const response = JSON.parse(data) as DataSuccess;
+            await vscode.env.clipboard.writeText(response.link);
+            vscode.window.showInformationMessage('Link copied to clipboard');
+          } else {
+            const response = JSON.parse(data) as DataError;
+            vscode.window.showErrorMessage(`Failed to post code: ${JSON.stringify(response)}`);
+          }
+        } catch (error) {
+          vscode.window.showErrorMessage(`Error parsing response: ${error}`);
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      vscode.window.showErrorMessage(`Request error: ${error}`);
+    });
+
+    req.write(postData);
+    req.end();
   });
 
   context.subscriptions.push(disposable);
