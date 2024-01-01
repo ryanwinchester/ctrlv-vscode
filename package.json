@@ -15,7 +15,36 @@
     "commands": [
       {
         "command": "ctrlv.post",
-        "title": "Post to ctrlv.io"
+        "title": "Post to ctrlv as paste"
+      }
+    ],
+    "configuration": {
+      "title": "ctrlv",
+      "properties": {
+        "ctrlv.host": {
+          "type": "string",
+          "default": "ctrlv.io",
+          "description": "The hostname of the ctrlv API endpoint. Useful if you self-host."
+        },
+        "ctrlv.apiKey": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "API key for accessing the ctrlv API."
+        },
+        "ctrlv.expiresIn": {
+          "type": "string",
+          "enum": ["0_minutes", "1_hour", "1_day", "3_days", "1_week", "1_month"],
+          "default": "1_day",
+          "description": "Time limit before the link expires."
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "ctrlv.post",
+        "key": "ctrl+alt+v",
+        "mac": "cmd+alt+v",
+        "when": "editorTextFocus"
       }
     ]
   },

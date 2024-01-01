@@ -1,14 +1,10 @@
-# ctrlv-vscode (WIP)
+# ctrlv-vscode
 
-This is the README for your extension "ctrlv". After writing up a brief description, we recommend including the following sections.
+Post code to [ctrlv.io](https://ctrlv.io) from VSCode, and get the link in your clipboard.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
+Sends either the selected text or the whole file to ctrlv.io, and copies the link to your clipboard.
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 

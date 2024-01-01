@@ -30,13 +30,29 @@ export function activate(context: vscode.ExtensionContext) {
     const language = editor.document.languageId;
     const selection = editor.selection;
 
-    const content = selection.isEmpty
-      ? editor.document.getText()
-      : editor.document.getText(selection);
+    let content;
+    
+    if (selection.isEmpty) {
+      content = editor.document.getText();
+    } else {
+      content = editor.document.getText(selection);
 
-    const apiKey = config.get('apiKey');
-    const host = config.get('host') || "ctrlv.io";
-    const expiresIn = config.get('expiresIn') || "1_day";
+      // If we aren't selecting from the start of the line, it's nice to indent it
+      // to the proper column.
+      if (selection.start.character !== 0) {
+        const startOfLineToSelection = new vscode.Range(
+          selection.start.line, 0,
+          selection.start.line, selection.start.character
+        );
+        const paddingText = editor.document.getText(startOfLineToSelection);
+        const whitespacePadding = paddingText.replace(/[^\t]/g, ' ');
+        content = whitespacePadding + content;
+      }
+    }
+
+    const apiKey = config.get<string | null>('apiKey');
+    const host = config.get<string>('host');
+    const expiresIn = config.get<string>('expiresIn');
 
     const postData = JSON.stringify({
       content: content,
