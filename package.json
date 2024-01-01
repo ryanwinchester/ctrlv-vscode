@@ -4,6 +4,7 @@
   "description": "Code pastebin ctrlv.io",
   "version": "0.0.1",
   "publisher": "RyanWinchester",
+  "icon": "images/icon.png",
   "repository": "https://github.com/ryanwinchester/ctrlv-vscode",
   "license": "Apache-2.0",
   "engines": {
