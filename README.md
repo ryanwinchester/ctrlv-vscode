@@ -1,5 +1,9 @@
 # ctrlv-vscode
 
+![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/RyanWinchester.ctrlv)
+![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/RyanWinchester.ctrlv)
+![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/stars/RyanWinchester.ctrlv)
+
 Post code to [ctrlv.io](https://ctrlv.io) from VSCode, and get the link in your clipboard.
 
 ## Features
